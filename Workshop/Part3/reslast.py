@@ -10,6 +10,7 @@ def resu(netw):
     P={}
     A={}
     u={}
+    c={}
     names=[]
     t=[]
 
@@ -23,6 +24,8 @@ def resu(netw):
             A[sol[i].split("_")[0]] = np.loadtxt(sol[i])
         if "u.last" in sol[i].split("_"):
             u[sol[i].split("_")[0]] = np.loadtxt(sol[i])
+        if "c.last" in sol[i].split("_"):
+            c[sol[i].split("_")[0]] = np.loadtxt(sol[i])
 
     os.chdir("..")
     for i in Q:
@@ -30,7 +33,7 @@ def resu(netw):
 
     t=Q[names[0]][:,0]
 
-    return Q,A,P,u,names,t
+    return Q,A,P,u,c,names,t
 
 
 def resuout(netw):

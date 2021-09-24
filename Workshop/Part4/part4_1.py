@@ -4,7 +4,7 @@ import GPy
 import sys
 from SALib.sample import saltelli
 from SALib.analyze import sobol
-
+import reslast
 import matplotlib.pyplot as plt
 import seaborn as sns
 import scipy.stats as ss
@@ -73,17 +73,36 @@ iinp = iinp[:,vves]
 normiinp=np.zeros([1,iinp.shape[1]])
 for i in range(iinp.shape[1]):
 	normiinp[0,i]=np.linalg.norm(iinp[:,i])
-inp=iinp/normiinp
+inp=iinp/normIINP
 print("--- Import and normalise outputs ---")
 oout=np.loadtxt("val_oout.txt")
 normoout=np.zeros([1,oout.shape[1]])
 for i in range(oout.shape[1]):
 	normoout[0,i]=np.linalg.norm(oout[:,i])
-out=oout/normoout
+out=oout/normOOUT
 print("--- Compute error ---")
 y,v = m1.predict(inp)
 mape = computemape(out,y)
 print("The average error is "+str(np.mean(mape)*100)+"%")
+
+
+
+
+### Evaluate performance of emulator on non-symmetric network
+qn,an,pn,un,cn,nn,tn=reslast.resu("networknonsym")
+INPns = np.array([1.43e-3,1600.e3,1.13e-3,1600.e3,1.43e-3,1600.e3,0.7e-3,2400.e3,2.3e10,1.9e-11,1.1e-3,2400.e3,2.9e10,1.9e-11,0.9e-3,2400.e3,1.9e10,1.9e-11,1.9e-3,2400.e3,1.9e10,1.9e-11])/normIINP
+Yn=m1.predict(INPns)[0]*normOOUT
+print("Max flow in 1-P (simulator): "+str(np.max(qn["1-P"][:,3])))
+print("Max flow in 1-P (emulator): "+str(Yn[0,6]))
+
+print("Max velocity in 3-D (simulator): "+str(np.max(un["3-D"][:,3])))
+print("Max velocity in 3-D (emulator): "+str(Yn[0,26]))
+
+
+
+
+
+
 
 
 print("### SENSITIVITY ANALYSIS ###")
