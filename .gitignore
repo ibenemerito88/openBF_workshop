@@ -1,0 +1,8 @@
+test/**/*_results/*
+**/.DS_Store
+cvs_results/*
+docs/build/*
+Manifest.toml
+README.html
+*.yaml
+*.conv
